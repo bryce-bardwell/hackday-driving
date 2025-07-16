@@ -11,9 +11,14 @@
           return response.json();
         }).then(data => {
           const skyBox = document.getElementById('sky')
+          const carBody = document.getElementById('car-body');
+          const carTop = document.getElementById('car-top');
           const commandText = document.getElementById('command');
 
-          skyBox.setAttribute('color', data.colour);
+          skyBox.setAttribute('color', data.skyColour);
+          carBody.setAttribute('color', data.carColour);
+          carTop.setAttribute('color', data.carColour);
+
           commandText.setAttribute('text', {
             value: data.command,
             align: 'center',

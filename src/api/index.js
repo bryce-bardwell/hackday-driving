@@ -8,8 +8,9 @@ app.use(express.json());
 app.use(cors());
 
 const state = {
-  command: 'command',
-  colour: 'colour'
+  command: '',
+  carColour: '',
+  skyColour: ''
 };
 
 app.post('/command', (req, res) => {
@@ -20,18 +21,18 @@ app.post('/command', (req, res) => {
 });
 
 app.post('/sky/colour', (req, res) => {
-  console.log(req.body);
+  console.log('sky colour:', req.body);
   const { colour } = req.body;
 
-  state.colour = colour;
+  state.skyColour = colour;
   res.status(200).send(`Thank you for the sky colour: ${colour}`);
 });
 
 app.post('/car/colour', (req, res) => {
-  console.log(req.body);
+  console.log('car colour:', req.body);
   const { colour } = req.body;
 
-  state.colour = colour;
+  state.carColour = colour;
   res.status(200).send(`Thank you for the car colour: ${colour}`);
 });
 
