@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <script type="text/javascript">
+      let isDriving = false;
+      let isForward = true;
+
+      setInterval(() => {
+        fetch('https://192.168.12.1:3000/state').then(response => {
+          return response.json();
+        }).then(data => {
+          const skyBox = document.getElementById('sky')
+          const commandText = document.getElementById('command');
+
+          skyBox.setAttribute('color', data.colour);
+          commandText.setAttribute('text', {
+            value: data.command,
+            align: 'center',
+            width: 6,
+            color: '#000000'
+          });
+          if (data.command === 'GO') {
+            isDriving = true;
+            isForward = true;
+          } else {
+            isDriving = false;
+          }
+
+          if (data.command === 'BACK') {
+            isDriving = true;
+            isForward = false;
+          }
+        })
+      }, 500);
+
+      setInterval(() => {
+        if (isDriving) {
+          const carBodyPosition = document.querySelector('#car-body').getAttribute('position');
+          const carTopPosition = document.querySelector('#car-top').getAttribute('position');
+          const carWheel1Position = document.querySelector('#car-wheel-1').getAttribute('position');
+          const carWheel2Position = document.querySelector('#car-wheel-2').getAttribute('position');
+          const carWheel3Position = document.querySelector('#car-wheel-3').getAttribute('position');
+          const carWheel4Position = document.querySelector('#car-wheel-4').getAttribute('position');
+
+          const carBody = document.querySelector('#car-body');
+          const carTop = document.querySelector('#car-top');
+          const carWheel1 = document.querySelector('#car-wheel-1');
+          const carWheel2 = document.querySelector('#car-wheel-2');
+          const carWheel3 = document.querySelector('#car-wheel-3');
+          const carWheel4 = document.querySelector('#car-wheel-4');
+
+          if (isForward) {
+            carBody.setAttribute('animation', "property: position; to: 0 0.3 -10; duration: 50000000000000000000000; easing: linear");
+            carTop.setAttribute('animation', "property: position; to: 0 0.6 -10; duration: 50000000000000000000000; easing: linear");
+            carWheel1.setAttribute('animation', "property: position; to: -0.33 0.15 -10.45; duration: 50000000000000000000000; easing: linear");
+            carWheel2.setAttribute('animation', "property: position; to: 0.33 0.15 -10.45; duration: 50000000000000000000000; easing: linear");
+            carWheel3.setAttribute('animation', "property: position; to: -0.33 0.15 -9.55; duration: 50000000000000000000000; easing: linear");
+            carWheel4.setAttribute('animation', "property: position; to: 0.33 0.15 -9.55; duration: 50000000000000000000000; easing: linear");
+          } else {
+            carBody.setAttribute('animation', "property: position; to: 0 0.3 10; duration: 50000000000000000000000; easing: linear");
+            carTop.setAttribute('animation', "property: position; to: 0 0.6 10; duration: 50000000000000000000000; easing: linear");
+            carWheel1.setAttribute('animation', "property: position; to: -0.33 0.15 9.55; duration: 50000000000000000000000; easing: linear");
+            carWheel2.setAttribute('animation', "property: position; to: 0.33 0.15 9.55; duration: 50000000000000000000000; easing: linear");
+            carWheel3.setAttribute('animation', "property: position; to: -0.33 0.15 10.45; duration: 50000000000000000000000; easing: linear");
+            carWheel4.setAttribute('animation', "property: position; to: 0.33 0.15 10.45; duration: 50000000000000000000000; easing: linear");
+          }
+        }
+      }, 1000)
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-entity id="command" text="" position="0 0.5 -3"></a-entity>
+      <a-sky color="#FFFFFF" id="sky"></a-sky>
+
+      <!-- Camera and Lighting -->
+      <a-entity position="0 0 3">
+        <a-camera></a-camera>
+      </a-entity>
+      <a-light type="directional" position="1 1 1" intensity="0.8"></a-light>
+      <a-light type="ambient" color="#ffffff"></a-light>
+            
+      <!-- Car Body -->
+      <a-box position="0 0.3 0" id="car-body" depth="1.2" height="0.3" width="0.75" color="red"></a-box>
+            
+      <!-- Car Top -->
+      <a-box position="0 0.6 0" id="car-top" depth="0.6" height="0.3" width="0.45" color="#990000"></a-box>
+            
+      <!-- Wheels -->
+      <a-cylinder position="-0.33 0.15 0.45" id="car-wheel-1" radius="0.12" height="0.12" rotation="90 0 0" color="black"></a-cylinder>
+      <a-cylinder position="0.33 0.15 0.45" id="car-wheel-2" radius="0.12" height="0.12" rotation="90 0 0" color="black"></a-cylinder>
+      <a-cylinder position="-0.33 0.15 -0.45" id="car-wheel-3" radius="0.12" height="0.12" rotation="90 0 0" color="black"></a-cylinder>
+      <a-cylinder position="0.33 0.15 -0.45" id="car-wheel-4" radius="0.12" height="0.12" rotation="90 0 0" color="black"></a-cylinder>
+            
+      <!-- Ground -->
+      <a-plane rotation="-90 0 0" width="1500" height="1500" color="#7BC8A4"></a-plane>
+    </a-scene>
+  </body>
+</html>
